@@ -2,8 +2,7 @@
    AI SPORTS ACADEMY - POSTGRESQL FRONTEND
    ========================================================= */
 
-const API = "http://127.0.0.1:5000/api";
-
+const API = "https://ai-sports-academy.onrender.com/api";
 const SPORTS = [
   "All Sports",
   "Cricket",
