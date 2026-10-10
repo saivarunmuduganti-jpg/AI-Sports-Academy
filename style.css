@@ -1,0 +1,53 @@
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#0876d1;--dark:#092b50;--bg:#f4f7fb;--text:#172554;--muted:#64748b;--border:#e1e7ef;--white:#fff}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}button{border:0;border-radius:7px;padding:10px 16px;background:var(--primary);color:white;cursor:pointer;font-weight:600}button:hover{filter:brightness(.92)}.outline{background:white;color:var(--primary);border:1px solid #cbdced}
+.hidden{display:none!important}
+
+/* Login */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#092b50,#0876d1);padding:20px}
+.login-card{width:390px;background:white;padding:40px;border-radius:16px;text-align:center;box-shadow:0 20px 50px #0003}.logo-mark{font-size:58px}.login-card h1{margin:10px 0}.login-card p{color:var(--muted);margin-bottom:25px}.login-card input,.login-card select{width:100%;padding:13px;margin:7px 0;border:1px solid #d5dee8;border-radius:7px}.login-card button{width:100%;margin-top:10px}.login-card small{display:block;margin-top:15px;color:var(--muted)}#loginError{color:#dc2626;margin-top:10px}
+
+/* Layout */
+.sidebar{position:fixed;left:0;top:0;width:230px;height:100vh;background:var(--dark);color:white;padding:18px 12px;z-index:20}.brand{font-weight:bold;font-size:17px;display:flex;gap:9px;align-items:center;padding:10px;margin-bottom:22px}.sidebar .nav-btn{width:100%;text-align:left;background:transparent;color:#d9e6f5;margin:2px 0;padding:11px 12px}.sidebar .nav-btn:hover,.sidebar .nav-btn.active{background:var(--primary)}.logout{position:absolute;bottom:18px;left:12px;width:calc(100% - 24px);background:#dc3545}.main{margin-left:230px;min-height:100vh}header{height:68px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px}.top-search{background:#f5f8fc;border:1px solid #e4eaf1;padding:8px 12px;border-radius:7px;color:var(--muted)}.top-search input{border:0;outline:0;background:transparent;width:300px}.header-right{display:flex;gap:15px;align-items:center}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#dcecff;color:var(--primary);font-weight:bold}.header-right #notificationBell{cursor:pointer}
+
+.page{display:none;padding:28px}.page.active{display:block}.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:23px}.heading h1{font-size:27px}.heading p{color:var(--muted);margin-top:4px}
+
+/* Cards */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:17px;margin-bottom:22px}.stats.mini{grid-template-columns:repeat(3,1fr)}.stat{background:white;border:1px solid var(--border);border-radius:10px;padding:18px;display:flex;gap:14px;align-items:center}.stat>span{width:44px;height:44px;border-radius:9px;display:grid;place-items:center;font-size:20px}.stat small{color:var(--muted)}.stat h2{margin-top:4px}.blue>span{background:#e1f0ff}.green>span{background:#ddf8e7}.orange>span{background:#fff0d4}.red>span{background:#ffe2e2}.red h2{color:#dc3545}
+
+/* Boxes */
+.box{background:white;border:1px solid var(--border);border-radius:10px;padding:21px;margin-bottom:20px}.box-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}.box-title h2,.box>h2{font-size:18px}.grid-2{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}.ai-panel{background:#eef7ff;border-left:4px solid var(--primary);padding:18px;border-radius:8px;line-height:1.7}.ai-good{background:#e4f8ea;color:#166534;border-left-color:#22c55e}.ai-warn{background:#fff4d9;color:#92400e;border-left-color:#f59e0b}
+canvas{max-height:300px}
+
+/* Filters / tables */
+.filters{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}.filters input,.filters select,.settings-box input,.settings-box select{padding:11px 12px;border:1px solid #d5dee8;border-radius:7px;background:white}.filters input{min-width:230px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:780px}th,td{padding:12px 10px;text-align:left;border-bottom:1px solid #e8edf2;font-size:14px}th{background:#f2f6fb;color:#334155;font-size:13px}.badge{padding:5px 9px;border-radius:14px;font-size:11px;font-weight:bold}.present,.paid{background:#dcf8e5;color:#15803d}.absent,.overdue{background:#ffe1e1;color:#dc2626}.pending{background:#fff0c9;color:#a16207}.small-btn{padding:6px 9px;font-size:12px;margin-right:4px}
+
+/* Coaches */
+.coach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.coach-card{background:white;border:1px solid var(--border);border-radius:10px;padding:22px}.coach-icon{width:58px;height:58px;border-radius:50%;background:#e5f1ff;display:grid;place-items:center;font-size:28px}.coach-card h2{margin:13px 0 5px}.coach-card p,.coach-card li{color:var(--muted);margin:7px 0}.coach-card ul{padding-left:18px;margin:14px 0}.coach-actions{display:flex;gap:8px}
+
+/* Performance / risk */
+.performance-result{min-height:180px}.recommendations{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.recommendation{background:#f7fafc;border:1px solid var(--border);padding:15px;border-radius:8px}.recommendation b{display:block;margin-bottom:7px}.risk-circle{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;margin:20px auto;font-size:30px;font-weight:bold;background:conic-gradient(#f59e0b 0 55%,#e8edf2 55%)}.center{text-align:center}.center ul{text-align:left}.risk-low{background:conic-gradient(#22c55e 0 25%,#e8edf2 25%)}.risk-high{background:conic-gradient(#ef4444 0 80%,#e8edf2 80%)}
+
+/* Notifications/settings */
+.notification-list{display:flex;flex-direction:column;gap:12px}.notification-item{background:white;border:1px solid var(--border);padding:17px;border-radius:9px;display:flex;justify-content:space-between;gap:15px;border-left:5px solid var(--primary)}.notification-item.read{opacity:.55}.notification-item.warning{border-left-color:#f59e0b}.notification-item.success{border-left-color:#22c55e}.notification-item small{display:block;color:var(--muted);margin-top:5px}.settings-box{max-width:600px;display:grid;gap:17px}.settings-box label{display:grid;gap:7px;font-weight:600}.export-buttons{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:#06182aaa;display:grid;place-items:center;z-index:100;padding:20px}.modal-card{width:420px;background:white;padding:25px;border-radius:12px;display:grid;gap:12px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}.modal-card input,.modal-card select{padding:12px;border:1px solid #d5dee8;border-radius:7px}.close{background:#eef2f6;color:#334155;font-size:22px;padding:3px 10px}
+
+/* Dark */
+body.dark{--bg:#0f172a;--text:#e5edf8;--muted:#9fb0c5;--white:#162033;--border:#26344a}body.dark .box,body.dark .stat,body.dark header,body.dark .modal-card,body.dark .login-card,body.dark .coach-card,body.dark .notification-item{background:#162033;color:#e5edf8}body.dark input,body.dark select,body.dark .filters input,body.dark .filters select{background:#111b2d;color:#e5edf8;border-color:#33445e}body.dark th{background:#1d2a3e;color:#e5edf8}body.dark .outline{background:#162033;color:#67b7ff}
+
+/* Responsive */
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.coach-grid{grid-template-columns:repeat(2,1fr)}.recommendations{grid-template-columns:1fr 1fr}}
+@media(max-width:750px){.sidebar{position:relative;width:100%;height:auto}.logout{position:static;width:100%;margin-top:15px}.main{margin-left:0}header{padding:12px 16px}.top-search input{width:150px}.page{padding:18px}.stats,.stats.mini,.coach-grid,.recommendations{grid-template-columns:1fr}.heading{gap:15px;align-items:flex-start;flex-direction:column}}
+
+/* Account creation / login */
+.remember{display:flex;align-items:center;gap:8px;margin:10px 0;color:#64748b;font-size:14px}
+.remember input{width:auto!important;margin:0!important}
+.register-button{background:transparent;color:#0876d1;border:1px solid #0876d1;width:100%;margin-top:10px}
+.register-button:hover{background:#0876d1;color:white}
+#loginError{color:#dc2626;margin-top:12px;font-size:14px}
+#registerMessage{margin-top:12px;font-size:14px}
+#registerForm h2,#loginForm h2{margin-bottom:15px}
+#registerForm input,#registerForm select,#loginForm input,#loginForm select{width:100%;padding:13px;margin:7px 0;border:1px solid #d5dee8;border-radius:7px}
