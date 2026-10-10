@@ -30,7 +30,9 @@ let schedules = [];
 let fees = [];
 let notifications = JSON.parse(
   localStorage.getItem("sportsAcademyNotifications") || "[]"
+
 );
+console.log("Loaded saved notifications:", notifications);
 
 let performanceChart = null;
 let sportChart = null;
