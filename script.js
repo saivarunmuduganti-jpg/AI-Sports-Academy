@@ -3362,115 +3362,81 @@ function createCharts() {
 }
 
 
-function createMetricsChart() {
 
-  if (
-    typeof Chart ===
-    "undefined"
-  ) {
+function createMetricsChart() {
+  if (typeof Chart === "undefined") return;
+
+  const canvas = document.getElementById("metricsChart");
+  if (!canvas) return;
+
+  if (metricsChart) {
+    metricsChart.destroy();
+    metricsChart = null;
+  }
+
+  // Include every player in the chart
+  if (!players || players.length === 0) {
     return;
   }
 
+  const selectedId = document.getElementById("performancePlayer")?.value;
 
-  const canvas =
-    document.getElementById(
-      "metricsChart"
-    );
+  // "All Players" shows everyone; a specific ID shows one player.
+  const selectedPlayers =
+    !selectedId || selectedId === "all"
+      ? players
+      : players.filter(p => String(p.id) === String(selectedId));
 
+  if (selectedPlayers.length === 0) return;
 
-  if (!canvas) return;
-
-
-  if (metricsChart) {
-
-    metricsChart.destroy();
-
-  }
-
-
-  const id =
-    Number(
-      document.getElementById(
-        "performancePlayer"
-      )?.value
-    );
-
-
-  const p =
-    players.find(
-      x =>
-        Number(x.id) === id
-    ) ||
-    players[0];
-
-
-  if (!p) return;
-
-
-  metricsChart =
-    new Chart(
-      canvas,
-      {
-
-        type:
-          "bar",
-
-        data: {
-
-          labels: [
-            "Performance",
-            "Attendance"
-          ],
-
-          datasets: [{
-
-            label:
-              p.name +
-              " Current Score",
-
-            data: [
-
-              Number(
-                p.performance || 0
-              ),
-
-              Number(
-                p.attendance || 0
-              )
-
-            ],
-
-            borderWidth:
-              1
-
-          }]
-
+  metricsChart = new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: selectedPlayers.map(p => p.name),
+      datasets: [
+        {
+          label: "Performance",
+          data: selectedPlayers.map(p =>
+            Number(p.performance ?? 0)
+          ),
+          borderWidth: 1
         },
-
-        options: {
-
-          responsive:
-            true,
-
-          scales: {
-
-            y: {
-
-              beginAtZero:
-                true,
-
-              max:
-                100
-
-            }
-
-          }
-
+        {
+          label: "Attendance",
+          data: selectedPlayers.map(p =>
+            Number(p.attendance ?? 0)
+          ),
+          borderWidth: 1
         }
-
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          title: {
+            display: true,
+            text: "Score (%)"
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Players"
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: "top"
+        }
       }
-    );
-
+    }
+  });
 }
 
 
