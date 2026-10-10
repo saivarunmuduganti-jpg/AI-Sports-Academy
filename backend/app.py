@@ -5,8 +5,14 @@ from database import get_connection
 from datetime import date, datetime
 
 app = Flask(__name__)
-CORS(app)
 
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "https://saivarunmuduganti-jpg.github.io"
+        ]
+    }
+})
 # ------------------------------------------------------------------
 # Database helpers
 # ------------------------------------------------------------------
