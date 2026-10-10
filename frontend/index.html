@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Sports Academy</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" class="login-page">
+  <div class="login-card">
+    <div class="logo-mark">🏆</div>
+    <h1>AI Sports Academy</h1>
+    <p>Manage • Track • Analyze • Grow</p>
+
+    <div id="loginForm">
+      <h2>Login</h2>
+      <input id="username" placeholder="Enter Username">
+      <input id="password" type="password" placeholder="Enter Password">
+      <select id="role">
+        <option value="Admin">Admin</option>
+        <option value="Coach">Coach</option>
+        <option value="Player">Player</option>
+      </select>
+      <label class="remember"><input type="checkbox" id="rememberUsername"> Remember username</label>
+      <button onclick="login()">Login</button>
+      <button class="register-button" onclick="showRegister()">Create Account</button>
+      <p id="loginError"></p>
+    </div>
+
+    <div id="registerForm" class="hidden">
+      <h2>Create Account</h2>
+      <input id="newUsername" placeholder="Create Username">
+      <input id="newPassword" type="password" placeholder="Create Password">
+      <input id="confirmPassword" type="password" placeholder="Confirm Password">
+      <select id="newRole">
+        <option value="Admin">Admin</option>
+        <option value="Coach">Coach</option>
+        <option value="Player">Player</option>
+      </select>
+      <button onclick="createAccount()">Create Account</button>
+      <button class="register-button" onclick="showLogin()">Back to Login</button>
+      <p id="registerMessage"></p>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <aside class="sidebar">
+    <div class="brand">🏆 <span>AI Sports<br>Academy</span></div>
+
+    <button class="nav-btn active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+    <button class="nav-btn" onclick="showPage('players',this)">👤 Players</button>
+    <button class="nav-btn" onclick="showPage('coaches',this)">🧑‍🏫 Coaches</button>
+    <button class="nav-btn" onclick="showPage('attendance',this)">✅ Attendance</button>
+    <button class="nav-btn" onclick="showPage('schedule',this)">📅 Training</button>
+    <button class="nav-btn" onclick="showPage('fees',this)">💰 Fees</button>
+    <button class="nav-btn" onclick="showPage('performance',this)">📈 Performance</button>
+    <button class="nav-btn" onclick="showPage('injury',this)">🩺 Injury Risk</button>
+    <button class="nav-btn" onclick="showPage('reports',this)">📊 Reports</button>
+    <button class="nav-btn" onclick="showPage('notifications',this)">🔔 Notifications</button>
+    <button class="nav-btn" onclick="showPage('settings',this)">⚙️ Settings</button>
+
+    <button class="logout" onclick="logout()">🚪 Logout</button>
+  </aside>
+
+  <main class="main">
+    <header>
+      <div class="top-search">
+        🔍 <input id="globalSearch" placeholder="Search players, coaches..." onkeyup="globalSearch()">
+      </div>
+      <div class="header-right">
+        <span id="notificationBell" onclick="showPage('notifications')">🔔</span>
+        <span class="avatar">A</span>
+        <span id="headerRole">Admin</span>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+      <div class="heading">
+        <div><h1>Dashboard</h1><p>Academy overview and AI insights</p></div>
+        <button onclick="refreshDashboard()">↻ Refresh</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat blue"><span>👥</span><div><small>Total Players</small><h2 id="dashPlayers">0</h2></div></div>
+        <div class="stat green"><span>🧑‍🏫</span><div><small>Total Coaches</small><h2 id="dashCoaches">0</h2></div></div>
+        <div class="stat orange"><span>✓</span><div><small>Attendance</small><h2 id="dashAttendance">0%</h2></div></div>
+        <div class="stat red"><span>₹</span><div><small>Pending Fees</small><h2 id="dashFees">₹0</h2></div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="box">
+          <div class="box-title"><h2>📈 Performance Trend</h2><button class="outline" onclick="showPage('performance')">Details</button></div>
+          <canvas id="performanceChart"></canvas>
+        </div>
+        <div class="box">
+          <div class="box-title"><h2>🤖 AI Insights</h2><button onclick="runDashboardAI()">Analyze</button></div>
+          <div id="dashboardAI" class="ai-panel">
+            <p>Click Analyze to generate current academy insights.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="box">
+          <div class="box-title"><h2>🏅 Sports Distribution</h2></div>
+          <canvas id="sportChart"></canvas>
+        </div>
+        <div class="box">
+          <div class="box-title"><h2>🔔 Recent Notifications</h2><button class="outline" onclick="showPage('notifications')">View All</button></div>
+          <div id="recentNotifications"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAYERS -->
+    <section id="players" class="page">
+      <div class="heading">
+        <div><h1>Player Management</h1><p>Add, edit, search and filter players</p></div>
+        <button onclick="openPlayerModal()">+ Add Player</button>
+      </div>
+      <div class="filters">
+        <input id="playerSearch" placeholder="🔍 Search player..." onkeyup="renderPlayers()">
+        <select id="playerSportFilter" onchange="renderPlayers()"></select>
+        <select id="playerBatchFilter" onchange="renderPlayers()">
+          <option>All Batches</option><option>U-10</option><option>U-12</option><option>U-14</option>
+          <option>U-16</option><option>U-18</option><option>Senior</option>
+        </select>
+        <select id="playerStatusFilter" onchange="renderPlayers()">
+          <option>All Status</option><option>Active</option><option>Inactive</option>
+        </select>
+      </div>
+      <div class="box table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Sport</th><th>Batch</th><th>Attendance</th><th>Performance</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="playerTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- COACHES -->
+    <section id="coaches" class="page">
+      <div class="heading">
+        <div><h1>Coach & Batch Management</h1><p>Manage coaches and sports</p></div>
+        <button onclick="openCoachModal()">+ Add Coach</button>
+      </div>
+      <div class="filters">
+        <input id="coachSearch" placeholder="🔍 Search coach..." onkeyup="renderCoaches()">
+        <select id="coachSportFilter" onchange="renderCoaches()"></select>
+      </div>
+      <div id="coachGrid" class="coach-grid"></div>
+    </section>
+
+    <!-- ATTENDANCE -->
+    <section id="attendance" class="page">
+      <div class="heading">
+        <div><h1>Attendance Management</h1><p>Mark and track daily attendance</p></div>
+        <button onclick="saveAttendance()">Save Attendance</button>
+      </div>
+      <div class="filters">
+        <input id="attendanceDate" type="date">
+        <select id="attendanceSport" onchange="renderAttendance()"></select>
+        <select id="attendanceBatch" onchange="renderAttendance()">
+          <option>All Batches</option><option>U-10</option><option>U-12</option><option>U-14</option>
+          <option>U-16</option><option>U-18</option><option>Senior</option>
+        </select>
+      </div>
+      <div class="box table-wrap">
+        <table>
+          <thead><tr><th>Present</th><th>Player</th><th>Sport</th><th>Batch</th><th>Status</th></tr></thead>
+          <tbody id="attendanceTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section id="schedule" class="page">
+      <div class="heading">
+        <div><h1>Training Schedule</h1><p>Manage sessions, coaches and venues</p></div>
+        <button onclick="openScheduleModal()">+ Add Session</button>
+      </div>
+      <div class="filters">
+        <select id="scheduleSportFilter" onchange="renderSchedule()"></select>
+        <select id="scheduleDayFilter" onchange="renderSchedule()">
+          <option>All Days</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+          <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+        </select>
+      </div>
+      <div class="box table-wrap">
+        <table>
+          <thead><tr><th>Day</th><th>Time</th><th>Sport</th><th>Batch</th><th>Coach</th><th>Venue</th><th>Action</th></tr></thead>
+          <tbody id="scheduleTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FEES -->
+    <section id="fees" class="page">
+      <div class="heading">
+        <div><h1>Fee Management</h1><p>Track paid, pending and overdue fees</p></div>
+        <button onclick="openFeeModal()">+ Add Fee</button>
+      </div>
+      <div class="stats mini">
+        <div class="stat blue"><span>💳</span><div><small>Total</small><h2 id="feeTotal">₹0</h2></div></div>
+        <div class="stat green"><span>✓</span><div><small>Paid</small><h2 id="feePaid">₹0</h2></div></div>
+        <div class="stat red"><span>!</span><div><small>Pending</small><h2 id="feePending">₹0</h2></div></div>
+      </div>
+      <div class="filters">
+        <input id="feeSearch" placeholder="🔍 Search player..." onkeyup="renderFees()">
+        <select id="feeStatusFilter" onchange="renderFees()">
+          <option>All</option><option>Paid</option><option>Pending</option><option>Overdue</option>
+        </select>
+      </div>
+      <div class="box table-wrap">
+        <table>
+          <thead><tr><th>Player</th><th>Sport</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="feeTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+   <!-- PERFORMANCE -->
+<section id="performance" class="page">
+  <div class="heading">
+    <div>
+      <h1>AI Performance Analytics</h1>
+      <p>Analyze player progress and generate recommendations</p>
+    </div>
+    <button onclick="runPerformanceAI()">🤖 Analyze Player</button>
+  </div>
+
+  <!-- ADD PERFORMANCE -->
+  <div class="box">
+    <h2>➕ Add Performance Test</h2>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Player</label>
+        <select id="addPerformancePlayer"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Test Name</label>
+        <input
+          type="text"
+          id="performanceTestName"
+          placeholder="e.g. Speed Test"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Score</label>
+        <input
+          type="number"
+          id="performanceScore"
+          min="0"
+          max="100"
+          placeholder="0 - 100"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Test Date</label>
+        <input
+          type="date"
+          id="performanceTestDate"
+        >
+      </div>
+
+    </div>
+
+    <button onclick="addPerformance()">
+      💾 Save Performance
+    </button>
+
+    <p id="performanceMessage"></p>
+  </div>
+
+  <!-- ANALYTICS FILTERS -->
+  <div class="filters">
+    <select id="performancePlayer" onchange="renderPerformance()"></select>
+
+    <select>
+      <option>Last 6 Months</option>
+      <option>Last 3 Months</option>
+      <option>Last Year</option>
+    </select>
+  </div>
+
+  <div class="grid-2">
+
+    <div class="box">
+      <h2>Performance Metrics</h2>
+      <canvas id="metricsChart"></canvas>
+    </div>
+
+    <div class="box">
+      <h2>AI Prediction</h2>
+      <div id="performanceResult" class="ai-panel"></div>
+    </div>
+
+  </div>
+
+  <div class="box">
+    <h2>Personalized Training Recommendations</h2>
+    <div id="recommendations" class="recommendations"></div>
+  </div>
+
+</section>
+
+    <!-- INJURY -->
+    <section id="injury" class="page">
+      <div class="heading">
+        <div><h1>🩺 Injury Risk Prediction</h1><p>Prototype risk analysis from workload and performance trends</p></div>
+        <button onclick="runInjuryAI()">Analyze Risk</button>
+      </div>
+      <div class="filters">
+        <select id="injuryPlayer"></select>
+      </div>
+      <div class="grid-2">
+        <div class="box center">
+          <div id="riskCircle" class="risk-circle">--</div>
+          <h2 id="riskLabel">Select a player</h2>
+          <p id="riskText">Run the analysis to view risk factors.</p>
+        </div>
+        <div class="box">
+          <h2>Risk Factors</h2>
+          <ul id="riskFactors"></ul>
+          <h2>Recommendations</h2>
+          <ul id="riskRecommendations"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="reports" class="page">
+      <div class="heading">
+        <div><h1>Reports</h1><p>Generate academy reports</p></div>
+        <button onclick="printReport()">🖨 Print</button>
+      </div>
+      <div class="stats">
+        <div class="stat blue"><span>👥</span><div><small>Players</small><h2 id="reportPlayers">0</h2></div></div>
+        <div class="stat green"><span>✓</span><div><small>Attendance</small><h2 id="reportAttendance">0%</h2></div></div>
+        <div class="stat orange"><span>📈</span><div><small>Performance</small><h2 id="reportPerformance">0</h2></div></div>
+        <div class="stat red"><span>₹</span><div><small>Pending</small><h2 id="reportPending">₹0</h2></div></div>
+      </div>
+      <div class="box">
+        <h2>Export Data</h2>
+        <div class="export-buttons">
+          <button onclick="downloadCSV('players')">Download Players CSV</button>
+          <button onclick="downloadCSV('fees')">Download Fees CSV</button>
+          <button onclick="downloadCSV('schedule')">Download Schedule CSV</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTIFICATIONS -->
+    <section id="notifications" class="page">
+      <div class="heading">
+        <div><h1>Notifications</h1><p>Alerts and academy updates</p></div>
+        <button onclick="markAllRead()">✓ Mark All Read</button>
+      </div>
+      <div id="notificationList" class="notification-list"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings" class="page">
+      <div class="heading"><div><h1>Settings</h1><p>Application preferences</p></div></div>
+      <div class="box settings-box">
+        <label>Academy Name<input id="academyName" value="AI Sports Academy"></label>
+        <label>Default Sport<select id="defaultSport"></select></label>
+        <label>Theme
+          <select id="themeSelect" onchange="changeTheme()">
+            <option value="light">Light</option><option value="dark">Dark</option>
+          </select>
+        </label>
+        <button onclick="saveSettings()">Save Settings</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- PLAYER MODAL -->
+<div id="playerModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="playerModalTitle">Add Player</h2><button class="close" onclick="closeModal('playerModal')">×</button></div>
+    <input type="hidden" id="editPlayerId">
+    <input id="mPlayerName" placeholder="Player Name">
+    <input id="mPlayerAge" type="number" placeholder="Age">
+    <select id="mPlayerSport"></select>
+    <select id="mPlayerBatch"><option>U-10</option><option>U-12</option><option>U-14</option><option>U-16</option><option>U-18</option><option>Senior</option></select>
+    <button onclick="savePlayer()">Save Player</button>
+  </div>
+</div>
+
+<!-- COACH MODAL -->
+<div id="coachModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head"><h2>Add Coach</h2><button class="close" onclick="closeModal('coachModal')">×</button></div>
+    <input id="mCoachName" placeholder="Coach Name">
+    <input id="mCoachExperience" type="number" placeholder="Experience (years)">
+    <select id="mCoachSport"></select>
+    <select id="mCoachBatch"><option>U-10</option><option>U-12</option><option>U-14</option><option>U-16</option><option>U-18</option><option>Senior</option></select>
+    <button onclick="saveCoach()">Save Coach</button>
+  </div>
+</div>
+
+<!-- SCHEDULE MODAL -->
+<div id="scheduleModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head"><h2>Add Training Session</h2><button class="close" onclick="closeModal('scheduleModal')">×</button></div>
+    <select id="mDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select>
+    <input id="mTime" placeholder="5:00 PM - 7:00 PM">
+    <select id="mScheduleSport"></select>
+    <select id="mScheduleBatch"><option>U-10</option><option>U-12</option><option>U-14</option><option>U-16</option><option>U-18</option><option>Senior</option></select>
+    <input id="mVenue" placeholder="Venue">
+    <button onclick="saveSchedule()">Save Session</button>
+  </div>
+</div>
+
+<!-- FEE MODAL -->
+<div id="feeModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head"><h2>Add Fee</h2><button class="close" onclick="closeModal('feeModal')">×</button></div>
+    <select id="mFeePlayer"></select>
+    <input id="mFeeAmount" type="number" placeholder="Amount">
+    <input id="mFeeDue" type="date">
+    <select id="mFeeStatus"><option>Pending</option><option>Paid</option><option>Overdue</option></select>
+    <button onclick="saveFee()">Save Fee</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
