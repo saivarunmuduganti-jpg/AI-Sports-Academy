@@ -28,7 +28,9 @@ let players = [];
 let coaches = [];
 let schedules = [];
 let fees = [];
-let notifications = [];
+let notifications = JSON.parse(
+  localStorage.getItem("sportsAcademyNotifications") || "[]"
+);
 
 let performanceChart = null;
 let sportChart = null;
@@ -389,7 +391,7 @@ async function loadAcademyData() {
       : [];
 
 
-  notifications = [];
+
 
 }
 
@@ -2761,31 +2763,23 @@ function runInjuryAI() {
    NOTIFICATIONS
    ========================================================= */
 
-function addNotification(
-  text,
-  type = "info"
-) {
-
+function addNotification(text, type = "info") {
   notifications.unshift({
-
-    id:
-      Date.now(),
-
+    id: Date.now(),
     text,
-
-    time:
-      "Just now",
-
+    time: new Date().toLocaleString(),
     type,
-
-    read:
-      false
-
+    read: false
   });
 
+  notifications = notifications.slice(0, 100);
+
+  localStorage.setItem(
+    "sportsAcademyNotifications",
+    JSON.stringify(notifications)
+  );
 
   renderNotifications();
-
 }
 
 
@@ -2898,23 +2892,31 @@ function renderNotifications() {
 
 
 function toggleRead(id) {
+  const notification = notifications.find(n => n.id === id);
 
-  const n =
-    notifications.find(
-      x => x.id === id
-    );
-
-
-  if (n) {
-
-    n.read =
-      !n.read;
-
+  if (notification) {
+    notification.read = !notification.read;
   }
 
+  localStorage.setItem(
+    "sportsAcademyNotifications",
+    JSON.stringify(notifications)
+  );
 
   renderNotifications();
+}
 
+function markAllRead() {
+  notifications.forEach(notification => {
+    notification.read = true;
+  });
+
+  localStorage.setItem(
+    "sportsAcademyNotifications",
+    JSON.stringify(notifications)
+  );
+
+  renderNotifications();
 }
 
 
